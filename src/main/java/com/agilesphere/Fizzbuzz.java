@@ -24,6 +24,7 @@ public class FizzBuzz {
 
     private final int from;
     private final int to;
+    private String output;
 
     private Integer hashCode;
     private String asString;
@@ -43,12 +44,15 @@ public class FizzBuzz {
     }
 
     public String output() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = from; i <= to; i++) {
-            sb.append(convert(i));
-            sb.append(addSeparator(i));
+        if (output == null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = from; i <= to; i++) {
+                sb.append(convert(i));
+                sb.append(addSeparator(i));
+            }
+            output = sb.toString();
         }
-        return sb.toString();
+        return output;
     }
 
     private String convert(int i) {
