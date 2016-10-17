@@ -10,6 +10,7 @@ import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.stream.Collectors.joining;
 
@@ -50,18 +51,18 @@ public class FizzBuzz {
         return output;
     }
 
-    private String convert(int i) {
+    private String convert(int value) {
         if (hasOverrideRules()) {
             for (OverrideRule rule : overrideRules) {
-                if (rule.matches(i)) {
+                if (rule.matches(value)) {
                     return rule.result();
                 }
             }
         }
-        if (DIVISIBLE_BY_3_AND_5.test(i)) return FIZZBUZZ;
-        if (DIVISIBLE_BY_3.test(i)) return FIZZ;
-        if (DIVISIBLE_BY_5.test(i)) return BUZZ;
-        return String.valueOf(i);
+        if (DIVISIBLE_BY_3_AND_5.test(value)) return FIZZBUZZ;
+        if (DIVISIBLE_BY_3.test(value)) return FIZZ;
+        if (DIVISIBLE_BY_5.test(value)) return BUZZ;
+        return String.valueOf(value);
     }
 
     private boolean allPositive(int... values) {
@@ -86,13 +87,14 @@ public class FizzBuzz {
         if (!(obj instanceof FizzBuzz)) return false;
         FizzBuzz that = (FizzBuzz) obj;
         return (this.from == that.from)
-                && (this.to == that.to);
+                && (this.to == that.to)
+                && equal(this.overrideRules, that.overrideRules);
     }
 
     @Override
     public int hashCode() {
         if (hashCode == null) {
-            hashCode = Objects.hashCode(from, to);
+            hashCode = Objects.hashCode(from, to, overrideRules);
         }
         return hashCode;
     }
@@ -103,6 +105,7 @@ public class FizzBuzz {
             asString = toStringHelper(getClass())
                     .add("from", from)
                     .add("to", to)
+                    .add("overrideRules", overrideRules)
                     .toString();
         }
         return asString;

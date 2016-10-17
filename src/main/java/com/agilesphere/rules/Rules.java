@@ -14,8 +14,8 @@ public class Rules {
 
     public static final OverrideRule LUCK_RULE = new OverrideRule() {
         @Override
-        public boolean matches(int i) {
-            return containsThree(i);
+        public boolean matches(int value) {
+            return containsThree(value);
         }
 
         @Override
