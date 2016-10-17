@@ -12,9 +12,15 @@ import static java.util.Arrays.asList;
 public class FizzBuzz {
 
     private static final Predicate<Integer> DIVISIBLE_BY_3 = i -> i % 3 == 0;
+    private static final Predicate<Integer> DIVISIBLE_BY_5 = i -> i % 5 == 0;
+    private static final Predicate<Integer> DIVISIBLE_BY_3_AND_5 = DIVISIBLE_BY_3.and(DIVISIBLE_BY_5);
     private static final Predicate<Integer> IS_NEGATIVE = i -> i < 0;
 
     private static final String FIZZ = "fizz";
+    private static final String BUZZ = "buzz";
+    private static final String FIZZBUZZ = FIZZ + BUZZ;
+    private static final String SPACE = " ";
+    private static final String NO_SPACE = "";
 
     private final int from;
     private final int to;
@@ -33,7 +39,7 @@ public class FizzBuzz {
     }
 
     public static FizzBuzz to(int to) {
-        return new FizzBuzz(1, to);
+        return FizzBuzz.of(1, to);
     }
 
     public String output() {
@@ -46,12 +52,14 @@ public class FizzBuzz {
     }
 
     private String convert(int i) {
+        if (DIVISIBLE_BY_3_AND_5.test(i)) return FIZZBUZZ;
         if (DIVISIBLE_BY_3.test(i)) return FIZZ;
+        if (DIVISIBLE_BY_5.test(i)) return BUZZ;
         return String.valueOf(i);
     }
 
     private String addSeparator(int i) {
-        return i < to ? " " : "";
+        return i < to ? SPACE : NO_SPACE;
     }
 
     private boolean allPositive(Integer... values) {
