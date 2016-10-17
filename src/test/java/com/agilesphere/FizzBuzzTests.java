@@ -35,7 +35,7 @@ public class FizzBuzzTests {
     }
 
     @Test
-    public void should_print_fizz_for_numbers_divisible_by_5() {
+    public void should_print_buzz_for_numbers_divisible_by_5() {
         // When
         FizzBuzz fb = FizzBuzz.of(1, 5);
 
