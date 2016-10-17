@@ -2,25 +2,25 @@ package com.agilesphere;
 
 import com.google.common.base.Objects;
 
-import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.OptionalInt;
+import java.util.function.IntPredicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.util.Arrays.asList;
 
 public class FizzBuzz {
 
-    private static final Predicate<Integer> DIVISIBLE_BY_3 = i -> i % 3 == 0;
-    private static final Predicate<Integer> DIVISIBLE_BY_5 = i -> i % 5 == 0;
-    private static final Predicate<Integer> DIVISIBLE_BY_3_AND_5 = DIVISIBLE_BY_3.and(DIVISIBLE_BY_5);
-    private static final Predicate<Integer> IS_NEGATIVE = i -> i < 0;
+    private static final IntPredicate DIVISIBLE_BY_3 = i -> i % 3 == 0;
+    private static final IntPredicate DIVISIBLE_BY_5 = i -> i % 5 == 0;
+    private static final IntPredicate DIVISIBLE_BY_3_AND_5 = DIVISIBLE_BY_3.and(DIVISIBLE_BY_5);
+    private static final IntPredicate IS_NEGATIVE = i -> i < 0;
 
     private static final String FIZZ = "fizz";
     private static final String BUZZ = "buzz";
     private static final String FIZZBUZZ = FIZZ + BUZZ;
     private static final String SPACE = " ";
-    private static final String NO_SPACE = "";
 
     private final int from;
     private final int to;
@@ -45,12 +45,9 @@ public class FizzBuzz {
 
     public String output() {
         if (output == null) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = from; i <= to; i++) {
-                sb.append(convert(i));
-                sb.append(addSeparator(i));
-            }
-            output = sb.toString();
+            output = IntStream.rangeClosed(from, to)
+                    .mapToObj(this::convert)
+                    .collect(Collectors.joining(SPACE));
         }
         return output;
     }
@@ -62,13 +59,9 @@ public class FizzBuzz {
         return String.valueOf(i);
     }
 
-    private String addSeparator(int i) {
-        return i < to ? SPACE : NO_SPACE;
-    }
-
-    private boolean allPositive(Integer... values) {
-        Optional<Integer> anyNegative =
-                asList(values).stream()
+    private boolean allPositive(int... values) {
+        OptionalInt anyNegative =
+                IntStream.of(values)
                         .filter(IS_NEGATIVE)
                         .findFirst();
         return !anyNegative.isPresent();
