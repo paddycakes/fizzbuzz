@@ -3,7 +3,7 @@ package com.agilesphere;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class FizzBuzzTests {
 
@@ -44,7 +44,25 @@ public class FizzBuzzTests {
         FizzBuzz.of(1, -5);
     }
 
+    @Test
+    public void two_fizzbuzz_with_same_ranges_should_be_equal() {
+        // When
+        FizzBuzz first = FizzBuzz.of(5, 18);
+        FizzBuzz second = FizzBuzz.of(5, 18);
 
+        // Then
+        assertEquals(first, second);
+    }
+
+    @Test
+    public void two_fizzbuzz_with_different_ranges_should_not_be_equal() {
+        // When
+        FizzBuzz first = FizzBuzz.of(3, 11);
+        FizzBuzz second = FizzBuzz.of(7, 21);
+
+        // Then
+        assertNotEquals(first, second);
+    }
 
 }
 
