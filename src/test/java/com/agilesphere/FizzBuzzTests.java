@@ -53,13 +53,18 @@ public class FizzBuzzTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void negative_from_input_should_throw_illegal_argument_exception() {
+    public void should_throw_illegal_argument_exception_when_negative_from_input() {
         FizzBuzz.of(-1, 5);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void negative_to_input_should_throw_illegal_argument_exception() {
+    public void should_throw_illegal_argument_exception_when_negative_to_input() {
         FizzBuzz.of(1, -5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throw_illegal_argument_exception_when_from_is_bigger_than_to_input() {
+        FizzBuzz.of(20, 1);
     }
 
     @Test

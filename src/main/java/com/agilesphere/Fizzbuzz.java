@@ -31,6 +31,7 @@ public class FizzBuzz {
 
     private FizzBuzz(int from, int to) {
         checkArgument(allPositive(from, to), "Input(s) cannot be negative");
+        checkArgument(inAscendingOrder(from, to), "'from' cannot be bigger than 'to");
         this.from = from;
         this.to = to;
     }
@@ -65,6 +66,10 @@ public class FizzBuzz {
                         .filter(IS_NEGATIVE)
                         .findFirst();
         return !anyNegative.isPresent();
+    }
+
+    private boolean inAscendingOrder(int from, int to) {
+        return from <= to;
     }
 
     @Override
