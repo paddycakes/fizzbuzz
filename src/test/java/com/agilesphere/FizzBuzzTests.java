@@ -34,5 +34,17 @@ public class FizzBuzzTests {
         assertThat(fb.output(), is("1 2 fizz"));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void negative_from_input_should_throw_illegal_argument_exception() {
+        FizzBuzz.of(-1, 5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void negative_to_input_should_throw_illegal_argument_exception() {
+        FizzBuzz.of(1, -5);
+    }
+
+
+
 }
 
