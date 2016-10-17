@@ -10,7 +10,7 @@ public class FizzBuzzTests {
     @Test
     public void should_print_number_for_one() {
         // When
-        Fizzbuzz fb = Fizzbuzz.of(1, 5);
+        Fizzbuzz fb = Fizzbuzz.to(1);
 
         // Then
         assertThat(fb.output(), is("1"));

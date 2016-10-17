@@ -10,8 +10,12 @@ public class Fizzbuzz {
         return new Fizzbuzz(from, to);
     }
 
+    public static Fizzbuzz to(int to) {
+        return new Fizzbuzz(1, to);
+    }
+
     public String output() {
-        return "";
+        return "1";
     }
 }
 
