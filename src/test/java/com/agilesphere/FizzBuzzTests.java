@@ -96,6 +96,11 @@ public class FizzBuzzTests {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void should_throw_illegal_argument_exception_when_zero_to_input() {
+        new FizzBuzz.Builder().from(1).to(0).build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void should_throw_illegal_argument_exception_when_from_is_bigger_than_to_input() {
         new FizzBuzz.Builder().from(20).to(1).build();
     }

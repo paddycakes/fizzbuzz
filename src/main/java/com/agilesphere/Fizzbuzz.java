@@ -28,7 +28,7 @@ public class FizzBuzz {
     private static final IntPredicate DIVISIBLE_BY_3 = i -> i % 3 == 0;
     private static final IntPredicate DIVISIBLE_BY_5 = i -> i % 5 == 0;
     private static final IntPredicate DIVISIBLE_BY_3_AND_5 = DIVISIBLE_BY_3.and(DIVISIBLE_BY_5);
-    private static final IntPredicate IS_NEGATIVE = i -> i < 0;
+    private static final IntPredicate IS_NEGATIVE = i -> i <= 0;
 
     private static final String FIZZ = "fizz";
     private static final String BUZZ = "buzz";
@@ -47,7 +47,7 @@ public class FizzBuzz {
     private String asString;
 
     private FizzBuzz(int from, int to, List<OverrideRule> overrideRules, boolean withStatistics) {
-        checkArgument(allPositive(from, to), "Inputs cannot be negative - from(%s) to(%s)", from, to);
+        checkArgument(allPositive(from, to), "Inputs must be positive - from(%s) to(%s)", from, to);
         checkArgument(inAscendingOrder(from, to), "from(%s) cannot be bigger than to(%s)", from, to);
         this.from = from;
         this.to = to;
@@ -231,11 +231,14 @@ public class FizzBuzz {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
+        System.out.println();
         System.out.println("Welcome to FizzBuzz.");
         int from = getRangeValue(in, "Please enter the number to generate Fizzbuzz from:");
         int to = getRangeValue(in, "Please enter the number to generate Fizzbuzz to:");
+        System.out.println();
         System.out.println("Would you like to add the LUCK override rule to the core game? (Y/n)");
         boolean withLuckRule = in.nextLine().equalsIgnoreCase("Y") ? true : false;
+        System.out.println();
         System.out.println("Would you like to add FizzBuzz statistics to the output? (Y/n)");
         boolean withStatistics = in.nextLine().equalsIgnoreCase("Y") ? true : false;
 
@@ -258,6 +261,7 @@ public class FizzBuzz {
         int rangeValue = 0;
         while (!quit) {
             try {
+                System.out.println();
                 System.out.println(message);
                 input = in.nextLine();
                 rangeValue = Integer.parseInt(input);
