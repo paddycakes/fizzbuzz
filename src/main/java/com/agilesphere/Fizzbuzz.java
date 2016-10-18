@@ -105,7 +105,6 @@ public class FizzBuzz {
 
     private String statistics() {
         Map<String, Long> frequencies = calculateFrequencies();
-        System.out.println(frequencies);
         return formatStatistics(frequencies);
     }
 
@@ -265,7 +264,7 @@ public class FizzBuzz {
                 System.out.println(message);
                 input = in.nextLine();
                 rangeValue = Integer.parseInt(input);
-                if (rangeValue < 0) throw new IllegalArgumentException("Invalid negative input value");
+                if (rangeValue < 0) throw new IllegalArgumentException("Invalid input value");
                 quit = true;
             } catch (IllegalArgumentException iae) {
                 System.out.println(format("'%s' is not a positive integer", input));

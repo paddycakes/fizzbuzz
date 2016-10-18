@@ -1,12 +1,12 @@
 package com.agilesphere;
 
+import com.agilesphere.rules.OverrideRule;
 import org.junit.Test;
 
 import static com.agilesphere.FizzBuzz.LINE_SEPARATOR;
 import static com.agilesphere.rules.Rules.LUCK_RULE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-
 
 public class FizzBuzzTests {
 
@@ -56,12 +56,49 @@ public class FizzBuzzTests {
     }
 
     @Test
-    public void should_print_lucky_for_numbers_that_contain_digit_3() {
+    public void with_override_rule_should_print_luck_for_numbers_that_contain_digit_3() {
         // When
-        FizzBuzz fb = new FizzBuzz.Builder().withOverrideRule(LUCK_RULE).build();
+        FizzBuzz fb = new FizzBuzz.Builder().to(23).withOverrideRule(LUCK_RULE).build();
 
         // Then
-        assertThat(fb.output(), is("1 2 luck 4 buzz fizz 7 8 fizz buzz 11 fizz luck 14 fizzbuzz 16 17 fizz 19 buzz"));
+        assertThat(fb.output(), is("1 2 luck 4 buzz fizz 7 8 fizz buzz 11 fizz luck 14 fizzbuzz 16 17 fizz 19 buzz fizz 22 luck"));
+    }
+
+    @Test
+    public void when_two_override_rules_both_match_the_one_added_first_should_take_precedence() {
+        // Given
+        OverrideRule rule1 = new OverrideRule() {
+            @Override
+            public boolean matches(int value) {
+                return value == 8;
+            }
+
+            @Override
+            public String result() {
+                return "rule1";
+            }
+        };
+
+        OverrideRule rule2 = new OverrideRule() {
+            @Override
+            public boolean matches(int value) {
+                return value == 8;
+            }
+
+            @Override
+            public String result() {
+                return "rule2";
+            }
+        };
+
+        // When
+        FizzBuzz fb = new FizzBuzz.Builder().from(8).to(8)
+                .withOverrideRule(rule1)
+                .withOverrideRule(rule2)
+                .build();
+
+        // Then
+        assertThat(fb.output(), is("rule1"));
     }
 
     @Test
@@ -84,10 +121,14 @@ public class FizzBuzzTests {
                         + "number: 10"));
     }
 
-
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_illegal_argument_exception_when_negative_from_input() {
         new FizzBuzz.Builder().from(-1).to(5).build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void should_throw_illegal_argument_exception_when_zero_from_input() {
+        new FizzBuzz.Builder().from(0).to(5).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -126,4 +167,3 @@ public class FizzBuzzTests {
     }
 
 }
-
