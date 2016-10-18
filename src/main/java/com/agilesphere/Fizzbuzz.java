@@ -36,7 +36,7 @@ public class FizzBuzz {
 
     private FizzBuzz(int from, int to, List<OverrideRule> overrideRules) {
         checkArgument(allPositive(from, to), "Inputs cannot be negative - from(%s) to(%s)", from, to);
-        checkArgument(inAscendingOrder(from, to), "'from' cannot be bigger than 'to");
+        checkArgument(inAscendingOrder(from, to), "from(%s) cannot be bigger than to(%s)", from, to);
         this.from = from;
         this.to = to;
         this.overrideRules = overrideRules;
