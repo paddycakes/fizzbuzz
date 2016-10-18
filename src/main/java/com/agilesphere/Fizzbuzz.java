@@ -211,11 +211,20 @@ public class FizzBuzz {
             return this;
         }
 
+        /**
+         * Whether the generated output should
+         * include FizzBuzz statistics.
+         * @return FizzBuzz Builder
+         */
         public Builder withStatistics() {
             this.withStatistics = true;
             return this;
         }
 
+        /**
+         * Build immutable FizzBuzz instance.
+         * @return Immutable FizzBuzz instance
+         */
         public FizzBuzz build() {
             return new FizzBuzz(from, to, rules, withStatistics);
         }
