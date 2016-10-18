@@ -264,7 +264,7 @@ public class FizzBuzz {
                 System.out.println(message);
                 input = in.nextLine();
                 rangeValue = Integer.parseInt(input);
-                if (rangeValue < 0) throw new IllegalArgumentException("Invalid input value");
+                if (rangeValue <= 0) throw new IllegalArgumentException("Invalid input value");
                 quit = true;
             } catch (IllegalArgumentException iae) {
                 System.out.println(format("'%s' is not a positive integer", input));
@@ -272,7 +272,4 @@ public class FizzBuzz {
         }
         return rangeValue;
     }
-
-
 }
-
