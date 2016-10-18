@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.joining;
  * FizzBuzz ranges over an ascending sequence of numbers replacing:
  *   - any number divisible by three with the word "fizz"
  *   - any number divisible by five with the word "buzz"
- *   - any number divisible by three and five wiht the word "fizzbuzz"
+ *   - any number divisible by three and five with the word "fizzbuzz"
  */
 public class FizzBuzz {
 
@@ -141,13 +141,14 @@ public class FizzBuzz {
         FizzBuzz that = (FizzBuzz) obj;
         return (this.from == that.from)
                 && (this.to == that.to)
-                && equal(this.overrideRules, that.overrideRules);
+                && equal(this.overrideRules, that.overrideRules)
+                && (withStatistics == withStatistics);
     }
 
     @Override
     public int hashCode() {
         if (hashCode == null) {
-            hashCode = Objects.hashCode(from, to, overrideRules);
+            hashCode = Objects.hashCode(from, to, overrideRules, withStatistics);
         }
         return hashCode;
     }
@@ -159,6 +160,7 @@ public class FizzBuzz {
                     .add("from", from)
                     .add("to", to)
                     .add("overrideRules", overrideRules)
+                    .add("withStatistics", withStatistics)
                     .toString();
         }
         return asString;
@@ -178,6 +180,7 @@ public class FizzBuzz {
 
         /**
          * The start value to generate FizzBuzz from.
+         * Must be positive integer.
          * @param from The start value
          * @return FizzBuzz Builder
          */
@@ -188,6 +191,7 @@ public class FizzBuzz {
 
         /**
          * The end value to generate FizzBuzz to.
+         * Must be positive integer.
          * @param to The end value
          * @return FizzBuzz Builder
          */
