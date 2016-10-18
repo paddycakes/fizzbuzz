@@ -1,6 +1,7 @@
 package com.agilesphere;
 
 import com.agilesphere.rules.OverrideRule;
+import com.agilesphere.rules.Rules;
 import org.junit.Test;
 
 import static com.agilesphere.FizzBuzz.LINE_SEPARATOR;
@@ -149,8 +150,8 @@ public class FizzBuzzTests {
     @Test
     public void two_fizzbuzz_with_same_ranges_should_be_equal() {
         // When
-        FizzBuzz first = new FizzBuzz.Builder().from(5).to(18).build();
-        FizzBuzz second = new FizzBuzz.Builder().from(5).to(18).build();
+        FizzBuzz first = new FizzBuzz.Builder().from(5).to(18).withOverrideRule(LUCK_RULE).withStatistics().build();
+        FizzBuzz second = new FizzBuzz.Builder().from(5).to(18).withOverrideRule(LUCK_RULE).withStatistics().build();
 
         // Then
         assertEquals(first, second);
