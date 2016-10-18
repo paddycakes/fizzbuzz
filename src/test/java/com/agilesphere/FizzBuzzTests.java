@@ -2,9 +2,11 @@ package com.agilesphere;
 
 import org.junit.Test;
 
+import static com.agilesphere.FizzBuzz.LINE_SEPARATOR;
 import static com.agilesphere.rules.Rules.LUCK_RULE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+
 
 public class FizzBuzzTests {
 
@@ -61,6 +63,27 @@ public class FizzBuzzTests {
         // Then
         assertThat(fb.output(), is("1 2 luck 4 buzz fizz 7 8 fizz buzz 11 fizz luck 14 fizzbuzz 16 17 fizz 19 buzz"));
     }
+
+    @Test
+    public void should_return_statistics_in_fizzbuzz_output_when_flag_set() {
+        // When
+        FizzBuzz fb = new FizzBuzz.Builder().withOverrideRule(LUCK_RULE).withStatistics().build();
+
+        // Then
+        assertThat(fb.output(), is(
+                "1 2 luck 4 buzz fizz 7 8 fizz buzz 11 fizz luck 14 fizzbuzz 16 17 fizz 19 buzz"
+                        + LINE_SEPARATOR
+                        + "buzz: 3"
+                        + LINE_SEPARATOR
+                        + "fizz: 4"
+                        + LINE_SEPARATOR
+                        + "fizzbuzz: 1"
+                        + LINE_SEPARATOR
+                        + "luck: 2"
+                        + LINE_SEPARATOR
+                        + "number: 10"));
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void should_throw_illegal_argument_exception_when_negative_from_input() {

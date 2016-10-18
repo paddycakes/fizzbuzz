@@ -5,15 +5,25 @@ import com.google.common.base.Objects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalInt;
+import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 
+/**
+ * FizzBuzz ranges over an ascending sequence of numbers replacing:
+ *   - any number divisible by three with the word "fizz"
+ *   - any number divisible by five with the word "buzz"
+ *   - any number divisible by three and five wiht the word "fizzbuzz"
+ */
 public class FizzBuzz {
 
     private static final IntPredicate DIVISIBLE_BY_3 = i -> i % 3 == 0;
@@ -24,29 +34,42 @@ public class FizzBuzz {
     private static final String FIZZ = "fizz";
     private static final String BUZZ = "buzz";
     private static final String FIZZBUZZ = FIZZ + BUZZ;
+    private static final String NUMBER = "number";
     private static final String SPACE = " ";
+    static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     private final int from;
     private final int to;
     private final List<OverrideRule> overrideRules;
+    private final boolean withStatistics;
     private String output;
 
     private Integer hashCode;
     private String asString;
 
-    private FizzBuzz(int from, int to, List<OverrideRule> overrideRules) {
+    private FizzBuzz(int from, int to, List<OverrideRule> overrideRules, boolean withStatistics) {
         checkArgument(allPositive(from, to), "Inputs cannot be negative - from(%s) to(%s)", from, to);
         checkArgument(inAscendingOrder(from, to), "from(%s) cannot be bigger than to(%s)", from, to);
         this.from = from;
         this.to = to;
         this.overrideRules = overrideRules;
+        this.withStatistics = withStatistics;
     }
 
+    /**
+     * Generates FizzBuzz output based on the input creational
+     * parameters which include the numeric range to iterate over
+     * as well as any optional override rules and statistics.
+     * The immutable output will be cached after first call to
+     * optimise performance on subsequent calls.
+     * @return FizzBuzz output string.
+     */
     public String output() {
         if (output == null) {
             output = IntStream.rangeClosed(from, to)
                     .mapToObj(this::convert)
                     .collect(joining(SPACE));
+            if (withStatistics) output += statistics();
         }
         return output;
     }
@@ -81,6 +104,38 @@ public class FizzBuzz {
         return !overrideRules.isEmpty();
     }
 
+    private String statistics() {
+        Map<String, Long> frequencies = calculateFrequencies();
+        System.out.println(frequencies);
+        return formatStatistics(frequencies);
+    }
+
+    private Map<String, Long> calculateFrequencies() {
+        return IntStream.rangeClosed(from, to)
+                .mapToObj(this::convert)
+                .collect(groupingBy(fizzBuzzIdentity(), counting()));
+    }
+
+    private String formatStatistics(Map<String, Long> frequencies) {
+        return LINE_SEPARATOR +
+                frequencies.entrySet()
+                        .stream()
+                        .map(entry -> entry.getKey() + ": " + entry.getValue())
+                        .sorted()
+                        .collect(joining(LINE_SEPARATOR));
+    }
+
+    private Function<String, String> fizzBuzzIdentity() {
+        return (String s) -> {
+            try {
+                Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                return s;
+            }
+            return NUMBER;
+        };
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -111,31 +166,58 @@ public class FizzBuzz {
         return asString;
     }
 
+    /**
+     * Builder to create immutable FizzBuzz instances.
+     */
     public static class Builder {
 
         private int from = 1;
         private int to = 20;
         private List<OverrideRule> rules = new ArrayList<>();
+        private boolean withStatistics = false;
 
         public Builder() {}
 
+        /**
+         * The start value to generate FizzBuzz from.
+         * @param from The start value
+         * @return FizzBuzz Builder
+         */
         public Builder from(int from) {
             this.from = from;
             return this;
         }
 
+        /**
+         * The end value to generate FizzBuzz to.
+         * @param to The end value
+         * @return FizzBuzz Builder
+         */
         public Builder to(int to) {
             this.to = to;
             return this;
         }
 
+        /**
+         * Add override rule that takes precedence over core
+         * FizzBuzz rules. The order of adding rules determines
+         * the order of precedence in final output with rules
+         * added in order of decreasing precedence.
+         * @param rule The override rule.
+         * @return FizzBuzz Builder
+         */
         public Builder withOverrideRule(OverrideRule rule) {
             rules.add(rule);
             return this;
         }
 
+        public Builder withStatistics() {
+            this.withStatistics = true;
+            return this;
+        }
+
         public FizzBuzz build() {
-            return new FizzBuzz(from, to, rules);
+            return new FizzBuzz(from, to, rules, withStatistics);
         }
     }
 
