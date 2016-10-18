@@ -1,12 +1,10 @@
 package com.agilesphere;
 
 import com.agilesphere.rules.OverrideRule;
+import com.agilesphere.rules.Rules;
 import com.google.common.base.Objects;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
@@ -14,6 +12,7 @@ import java.util.stream.IntStream;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
@@ -229,6 +228,48 @@ public class FizzBuzz {
             return new FizzBuzz(from, to, rules, withStatistics);
         }
     }
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Welcome to FizzBuzz.");
+        int from = getRangeValue(in, "Please enter the number to generate Fizzbuzz from:");
+        int to = getRangeValue(in, "Please enter the number to generate Fizzbuzz to:");
+        System.out.println("Would you like to add the LUCK override rule to the core game? (Y/n)");
+        boolean withLuckRule = in.nextLine().equalsIgnoreCase("Y") ? true : false;
+        System.out.println("Would you like to add FizzBuzz statistics to the output? (Y/n)");
+        boolean withStatistics = in.nextLine().equalsIgnoreCase("Y") ? true : false;
+
+        FizzBuzz.Builder builder = new Builder().from(from).to(to);
+        builder = withLuckRule ? builder.withOverrideRule(Rules.LUCK_RULE) : builder;
+        builder = withStatistics ? builder.withStatistics() : builder;
+
+        FizzBuzz fizzBuzz = builder.build();
+
+        System.out.println();
+        System.out.println("FizzBuzz:");
+        System.out.println("---------");
+        System.out.println();
+        System.out.println(fizzBuzz.output());
+    }
+
+    private static int getRangeValue(Scanner in, String message) {
+        boolean quit = false;
+        String input = null;
+        int rangeValue = 0;
+        while (!quit) {
+            try {
+                System.out.println(message);
+                input = in.nextLine();
+                rangeValue = Integer.parseInt(input);
+                if (rangeValue < 0) throw new IllegalArgumentException("Invalid negative input value");
+                quit = true;
+            } catch (IllegalArgumentException iae) {
+                System.out.println(format("'%s' is not a positive integer", input));
+            }
+        }
+        return rangeValue;
+    }
+
 
 }
 
