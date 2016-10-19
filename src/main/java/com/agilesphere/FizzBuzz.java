@@ -275,6 +275,7 @@ public class FizzBuzz {
         System.out.println("---------");
         System.out.println();
         System.out.println(fizzBuzz.output());
+        System.out.println();
     }
 
     private static int getRangeValue(Scanner in, String message) {
