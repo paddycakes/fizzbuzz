@@ -1,7 +1,6 @@
 package com.agilesphere;
 
 import com.agilesphere.rules.Rule;
-import com.agilesphere.rules.Rules;
 import com.google.common.base.Objects;
 
 import java.util.*;
@@ -15,9 +14,7 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.counting;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.*;
 
 /**
  * FizzBuzz ranges over an ascending sequence of numbers replacing:
@@ -78,7 +75,7 @@ public class FizzBuzz {
         Optional<String> anyCoreMatch = anyMatchingCoreRule(value);
         if (anyCoreMatch.isPresent()) return anyCoreMatch.get();
 
-        return returnNumber(value);
+        return number(value);
     }
 
     private Optional<String> anyMatchingCoreRule(int value) {
@@ -103,7 +100,7 @@ public class FizzBuzz {
         return (result != null) ? Optional.of(result) : Optional.empty();
     }
 
-    private String returnNumber(int value) {
+    private String number(int value) {
         return String.valueOf(value);
     }
 
@@ -161,6 +158,7 @@ public class FizzBuzz {
         FizzBuzz that = (FizzBuzz) obj;
         return (this.from == that.from)
                 && (this.to == that.to)
+                && equal(this.coreRules, that.coreRules)
                 && equal(this.overrideRules, that.overrideRules)
                 && (withStatistics == withStatistics);
     }
@@ -168,7 +166,7 @@ public class FizzBuzz {
     @Override
     public int hashCode() {
         if (hashCode == null) {
-            hashCode = Objects.hashCode(from, to, overrideRules, withStatistics);
+            hashCode = Objects.hashCode(from, to, coreRules, overrideRules, withStatistics);
         }
         return hashCode;
     }
@@ -179,6 +177,7 @@ public class FizzBuzz {
             asString = toStringHelper(getClass())
                     .add("from", from)
                     .add("to", to)
+                    .add("coreRules", coreRules)
                     .add("overrideRules", overrideRules)
                     .add("withStatistics", withStatistics)
                     .toString();
