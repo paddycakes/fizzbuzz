@@ -12,15 +12,16 @@ import static java.util.stream.StreamSupport.intStream;
  */
 public class Rules {
 
-    private static final String LUCK = "luck";
-
-    private static final IntPredicate EQUALS_3 = i -> i == 3;
-
     /**
      * Rule that will match any value that contains a
      * three and will return the text 'luck'.
      */
     public static final OverrideRule LUCK_RULE = new OverrideRule() {
+
+        private static final String LUCK = "luck";
+
+        private final IntPredicate EQUALS_3 = i -> i == 3;
+
         @Override
         public boolean matches(int value) {
             return containsThree(value);
@@ -30,10 +31,12 @@ public class Rules {
         public String result() {
             return LUCK;
         }
+
+        private boolean containsThree(int i) {
+            IntStream digitStream = intStream(base10Spliterator(i), false);
+            return digitStream.anyMatch(EQUALS_3);
+        }
     };
 
-    private static boolean containsThree(int i) {
-        IntStream digitStream = intStream(base10Spliterator(i), false);
-        return digitStream.anyMatch(EQUALS_3);
-    }
+
 }

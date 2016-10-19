@@ -74,17 +74,26 @@ public class FizzBuzz {
     }
 
     private String convert(int value) {
-        if (hasOverrideRules()) {
-            for (OverrideRule rule : overrideRules) {
-                if (rule.matches(value)) {
-                    return rule.result();
-                }
-            }
-        }
+        Optional<String> anyMatch = anyMatchingOverrideRule(value);
+        if (anyMatch.isPresent()) return anyMatch.get();
+
         if (DIVISIBLE_BY_3_AND_5.test(value)) return FIZZBUZZ;
         if (DIVISIBLE_BY_3.test(value)) return FIZZ;
         if (DIVISIBLE_BY_5.test(value)) return BUZZ;
         return String.valueOf(value);
+    }
+
+    private Optional<String> anyMatchingOverrideRule(int value) {
+        String result = null;
+        if (hasOverrideRules()) {
+            for (OverrideRule rule : overrideRules) {
+                if (rule.matches(value)) {
+                    result = rule.result();
+                    break;
+                }
+            }
+        }
+        return (result != null) ? Optional.of(result) : Optional.empty();
     }
 
     private boolean allPositive(int... values) {
