@@ -3,6 +3,8 @@ package com.agilesphere;
 import com.agilesphere.rules.Rule;
 import org.junit.Test;
 
+import java.util.function.IntPredicate;
+
 import static com.agilesphere.FizzBuzz.LINE_SEPARATOR;
 import static com.agilesphere.rules.Rules.LUCK_RULE;
 import static org.hamcrest.CoreMatchers.is;
@@ -67,27 +69,38 @@ public class FizzBuzzTests {
     @Test
     public void when_two_override_rules_both_match_the_one_added_first_should_take_precedence() {
         // Given
+        IntPredicate EQUALS_8 = i -> i == 8;
         Rule rule1 = new Rule() {
             @Override
             public boolean matches(int value) {
-                return value == 8;
+                return EQUALS_8.test(value);
             }
 
             @Override
             public String result() {
                 return "rule1";
             }
+
+            @Override
+            public IntPredicate rule() {
+                return EQUALS_8;
+            }
         };
 
         Rule rule2 = new Rule() {
             @Override
             public boolean matches(int value) {
-                return value == 8;
+                return EQUALS_8.test(value);
             }
 
             @Override
             public String result() {
                 return "rule2";
+            }
+
+            @Override
+            public IntPredicate rule() {
+                return EQUALS_8;
             }
         };
 
