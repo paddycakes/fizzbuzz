@@ -1,5 +1,6 @@
 package com.agilesphere
 
+import com.agilesphere.rules.Rule
 import spock.lang.Specification
 
 class FizzBuzzSpec extends Specification {
@@ -28,6 +29,37 @@ class FizzBuzzSpec extends Specification {
         then:
         IllegalArgumentException e = thrown()
         e.message == "from(8) cannot be bigger than to(7)"
+    }
+
+    def "when two rules both match the one added first should take precedence"() {
+        given:
+        def rule1 = [
+                matches: { i -> i == 5 },
+                result: { "rule1" },
+                rule: { i -> i == 5 }
+        ] as Rule
+
+        def rule2 = [
+                matches: { i -> i == 8 },
+                result: { "rule2" },
+                rule: { i -> i == 8 }
+        ] as Rule
+
+        def rule3 = [
+                matches: { i -> i == 8 },
+                result: { "rule3" },
+                rule: { i -> i == 8 }
+        ] as Rule
+
+        when:
+        def fb = new FizzBuzz.Builder().from(8).to(8)
+                .withOverrideRule(rule1)
+                .withOverrideRule(rule2)
+                .withOverrideRule(rule3)
+                .build()
+
+        then:
+        fb.output() == "rule2"
     }
 
 }

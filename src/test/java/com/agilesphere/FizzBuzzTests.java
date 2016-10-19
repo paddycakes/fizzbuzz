@@ -160,7 +160,7 @@ public class FizzBuzzTests {
     }
 
     @Test
-    public void two_fizzbuzz_with_same_ranges_should_be_equal() {
+    public void two_fizzbuzz_with_same_constructor_params_should_be_equal() {
         // When
         FizzBuzz first = new FizzBuzz.Builder().from(5).to(18).withOverrideRule(LUCK_RULE).withStatistics().build();
         FizzBuzz second = new FizzBuzz.Builder().from(5).to(18).withOverrideRule(LUCK_RULE).withStatistics().build();
