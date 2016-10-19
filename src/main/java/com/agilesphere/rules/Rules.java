@@ -21,6 +21,10 @@ public class Rules {
     private static final IntPredicate DIVISIBLE_BY_5 = i -> i % 5 == 0;
     private static final IntPredicate DIVISIBLE_BY_3_AND_5 = DIVISIBLE_BY_3.and(DIVISIBLE_BY_5);
 
+    /**
+     * Core rule that will match any value that is
+     * divisible by 3 and will return the string 'fizz'.
+     */
     public static final Rule FIZZ_RULE = new Rule() {
 
         @Override
@@ -34,6 +38,10 @@ public class Rules {
         }
     };
 
+    /**
+     * Core rule that will match any value that is
+     * divisible by 5 and will return the string 'buzz'.
+     */
     public static final Rule BUZZ_RULE = new Rule() {
 
         @Override
@@ -47,6 +55,10 @@ public class Rules {
         }
     };
 
+    /**
+     * Core rule that will match any value that is divisible
+     * by both 3 and 5 and will return the string 'fizzbuzz'.
+     */
     public static final Rule FIZZBUZZ_RULE = new Rule() {
 
         @Override
@@ -62,7 +74,7 @@ public class Rules {
 
     /**
      * Override rule that will match any value that contains a
-     * three and will return the text 'luck'.
+     * three and will return the string 'luck'.
      */
     public static final Rule LUCK_RULE = new Rule() {
 

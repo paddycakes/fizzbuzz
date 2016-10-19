@@ -9,10 +9,12 @@ import java.util.function.Function;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
+import static com.agilesphere.rules.Rules.*;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
@@ -46,7 +48,7 @@ public class FizzBuzz {
         checkArgument(inAscendingOrder(from, to), "from(%s) cannot be bigger than to(%s)", from, to);
         this.from = from;
         this.to = to;
-        this.coreRules = Arrays.asList(Rules.FIZZBUZZ_RULE, Rules.FIZZ_RULE, Rules.BUZZ_RULE);
+        this.coreRules = asList(FIZZBUZZ_RULE, FIZZ_RULE, BUZZ_RULE);
         this.overrideRules = overrideRules;
         this.withStatistics = withStatistics;
     }
@@ -264,7 +266,7 @@ public class FizzBuzz {
         boolean withStatistics = in.nextLine().equalsIgnoreCase("Y") ? true : false;
 
         FizzBuzz.Builder builder = new Builder().from(from).to(to);
-        builder = withLuckRule ? builder.withOverrideRule(Rules.LUCK_RULE) : builder;
+        builder = withLuckRule ? builder.withOverrideRule(LUCK_RULE) : builder;
         builder = withStatistics ? builder.withStatistics() : builder;
 
         FizzBuzz fizzBuzz = builder.build();

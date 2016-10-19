@@ -1,8 +1,8 @@
 package com.agilesphere.rules;
 
 /**
- * An interface to represent rules that can be added to FizzBuzz
- * as overrides that take precedence over the core game rules.
+ * An interface to represent rules that can be added to FizzBuzz both as
+ * core game rules or as overrides that take precedence over core rules.
  */
 public interface Rule {
 
