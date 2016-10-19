@@ -1,7 +1,6 @@
 package com.agilesphere;
 
-import com.agilesphere.rules.OverrideRule;
-import com.agilesphere.rules.Rules;
+import com.agilesphere.rules.Rule;
 import org.junit.Test;
 
 import static com.agilesphere.FizzBuzz.LINE_SEPARATOR;
@@ -68,7 +67,7 @@ public class FizzBuzzTests {
     @Test
     public void when_two_override_rules_both_match_the_one_added_first_should_take_precedence() {
         // Given
-        OverrideRule rule1 = new OverrideRule() {
+        Rule rule1 = new Rule() {
             @Override
             public boolean matches(int value) {
                 return value == 8;
@@ -80,7 +79,7 @@ public class FizzBuzzTests {
             }
         };
 
-        OverrideRule rule2 = new OverrideRule() {
+        Rule rule2 = new Rule() {
             @Override
             public boolean matches(int value) {
                 return value == 8;

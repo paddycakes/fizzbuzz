@@ -1,6 +1,6 @@
 package com.agilesphere;
 
-import com.agilesphere.rules.OverrideRule;
+import com.agilesphere.rules.Rule;
 import com.agilesphere.rules.Rules;
 import com.google.common.base.Objects;
 
@@ -25,32 +25,28 @@ import static java.util.stream.Collectors.joining;
  */
 public class FizzBuzz {
 
-    private static final IntPredicate DIVISIBLE_BY_3 = i -> i % 3 == 0;
-    private static final IntPredicate DIVISIBLE_BY_5 = i -> i % 5 == 0;
-    private static final IntPredicate DIVISIBLE_BY_3_AND_5 = DIVISIBLE_BY_3.and(DIVISIBLE_BY_5);
     private static final IntPredicate IS_NEGATIVE = i -> i <= 0;
 
-    private static final String FIZZ = "fizz";
-    private static final String BUZZ = "buzz";
-    private static final String FIZZBUZZ = FIZZ + BUZZ;
     private static final String NUMBER = "number";
     private static final String SPACE = " ";
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     private final int from;
     private final int to;
-    private final List<OverrideRule> overrideRules;
+    private final List<Rule> coreRules;
+    private final List<Rule> overrideRules;
     private final boolean withStatistics;
     private String output;
 
     private Integer hashCode;
     private String asString;
 
-    private FizzBuzz(int from, int to, List<OverrideRule> overrideRules, boolean withStatistics) {
+    private FizzBuzz(int from, int to, List<Rule> overrideRules, boolean withStatistics) {
         checkArgument(allPositive(from, to), "Inputs must be positive - from(%s) to(%s)", from, to);
         checkArgument(inAscendingOrder(from, to), "from(%s) cannot be bigger than to(%s)", from, to);
         this.from = from;
         this.to = to;
+        this.coreRules = Arrays.asList(Rules.FIZZBUZZ_RULE, Rules.FIZZ_RULE, Rules.BUZZ_RULE);
         this.overrideRules = overrideRules;
         this.withStatistics = withStatistics;
     }
@@ -74,26 +70,39 @@ public class FizzBuzz {
     }
 
     private String convert(int value) {
-        Optional<String> anyMatch = anyMatchingOverrideRule(value);
-        if (anyMatch.isPresent()) return anyMatch.get();
+        Optional<String> anyOverrideMatch = anyMatchingOverrideRule(value);
+        if (anyOverrideMatch.isPresent()) return anyOverrideMatch.get();
 
-        if (DIVISIBLE_BY_3_AND_5.test(value)) return FIZZBUZZ;
-        if (DIVISIBLE_BY_3.test(value)) return FIZZ;
-        if (DIVISIBLE_BY_5.test(value)) return BUZZ;
-        return String.valueOf(value);
+        Optional<String> anyCoreMatch = anyMatchingCoreRule(value);
+        if (anyCoreMatch.isPresent()) return anyCoreMatch.get();
+
+        return returnNumber(value);
+    }
+
+    private Optional<String> anyMatchingCoreRule(int value) {
+        return anyMatchingRule(value, coreRules);
     }
 
     private Optional<String> anyMatchingOverrideRule(int value) {
-        String result = null;
         if (hasOverrideRules()) {
-            for (OverrideRule rule : overrideRules) {
-                if (rule.matches(value)) {
-                    result = rule.result();
-                    break;
-                }
+            return anyMatchingRule(value, overrideRules);
+        }
+        return Optional.empty();
+    }
+
+    private Optional<String> anyMatchingRule(int value, List<Rule> rules) {
+        String result = null;
+        for (Rule rule : rules) {
+            if (rule.matches(value)) {
+                result = rule.result();
+                break;
             }
         }
         return (result != null) ? Optional.of(result) : Optional.empty();
+    }
+
+    private String returnNumber(int value) {
+        return String.valueOf(value);
     }
 
     private boolean allPositive(int... values) {
@@ -182,7 +191,7 @@ public class FizzBuzz {
 
         private int from = 1;
         private int to = 20;
-        private List<OverrideRule> rules = new ArrayList<>();
+        private List<Rule> rules = new ArrayList<>();
         private boolean withStatistics = false;
 
         public Builder() {}
@@ -217,7 +226,7 @@ public class FizzBuzz {
          * @param rule The override rule.
          * @return FizzBuzz Builder
          */
-        public Builder withOverrideRule(OverrideRule rule) {
+        public Builder withOverrideRule(Rule rule) {
             rules.add(rule);
             return this;
         }

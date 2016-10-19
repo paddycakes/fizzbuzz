@@ -4,7 +4,7 @@ package com.agilesphere.rules;
  * An interface to represent rules that can be added to FizzBuzz
  * as overrides that take precedence over the core game rules.
  */
-public interface OverrideRule {
+public interface Rule {
 
     /**
      * Determines if value matches the rule.
