@@ -11,6 +11,8 @@ An application to generate FizzBuzz output based on:
 
 I have used Java 8 to implement this and attempted a functional approach where appropriate.
 
+Tests are written in Scala and Groovy as well as Java.
+
 The specification can be found in /docs/Specification.docx
 
 ## Gradle Build
@@ -25,17 +27,33 @@ http://www.gradle.org/docs/current/userguide/gradle_wrapper.html
 
 The Gradle Wrapper is a batch script on Windows or a shell script on *nix. When you start a Gradle build via the wrapper, Gradle will be automatically downloaded and used to run the build. This provides the benefit that anyone can work with it without needing to install Gradle beforehand. It also ensures that users are guaranteed to use the version of Gradle that the build was designed to work with.
 
-## Spock for BDD Testing
+## Spock and Scala for BDD Testing
 
-I have provided a JUnit test suite in the following class:
+I have provided a JUnit test suite in the following class which can be found in src/test/java:
 
 	com.agilesphere.FizzBuzzTests
 
-However, I have also written some tests with a BDD approach using Spock. Spock is a developer testing and specification framework for Java and Groovy applications. It provides a very powerful and expressive specification language through the power of a Groovy DSL. Spock specifications conventionally have the suffix 'Spec'. One of it's power features, and one which I have used, is the ability it affords for data driven testing. Often it is useful to exercise the same test code multiple times, with varying inputs and expected results. Spock’s data driven testing support makes this extremely easy and I have utilised this in the following specification tests:
+However, I have also written some tests with a BDD approach using Spock:
+
+http://spockframework.org
+
+Spock is a developer testing and specification framework for Java and Groovy applications. It provides a very powerful and expressive specification language through the power of a Groovy DSL. Spock specifications conventionally have the suffix 'Spec'. One of it's power features, and one which I have used, is the ability it affords for data driven testing. Often it is useful to exercise the same test code multiple times, with varying inputs and expected results. Spock’s data driven testing support makes this extremely easy.
+
+I have utilised this in the following specification tests which can be found in src/test/groovy:
 
     com.agilesphere.FizzBuzzSpec
     com.agilesphere.rules.RulesSpec
     com.agilesphere.utils.DigitSpliteratorSpec
+    
+As well as Spock, I have also used ScalaTest:
+
+http://www.scalatest.org
+
+with the WordSpec trait to provide a nice hierarchical/nested structure to group related tests as well as providing very readable specifications.
+
+An example of this type of test can be found in src/test/scala:
+
+    com.agilesphere.FizzBuzzScalaSpec
 
 ## Build Tasks
 
